@@ -1,4 +1,3 @@
-from os import read
 import folium
 import pandas as pd
 import pathlib
