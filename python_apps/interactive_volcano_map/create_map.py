@@ -30,10 +30,20 @@ def setVolcanoMarkerColour(elevation):
     else:
         return 'blue'
 
+#Define html for pop-up text
+popup_html = """
+<h4 class='volcano-name' style='margin-bottom: 5px;'>%s</h4>
+<div class='volcano-info-list'>
+    <div class='list-item'>Latitude: %s</div>
+    <div class='list-item'>Longitude: %s</div>
+    <div class='list-item'>Elevation: %sm</div>
+</div>
+"""
+
 #add all the volcano markers to the feature group
 for lat, lon, name, elevation in zip(volcano_lat, volcano_lon, volcano_name, volcano_elevation):
-    #iframe = folium.IFrame(html=html % str(el), width=200, height=100)
-    volcano_points.add_child(folium.Marker(location=[lat, lon], popup=folium.Popup(name), icon=folium.Icon(color=setVolcanoMarkerColour(elevation=elevation))))
+    popup_display = folium.IFrame(html=popup_html % (name, lat, lon, elevation), width=200, height=100)
+    volcano_points.add_child(folium.Marker(location=[lat, lon], popup=folium.Popup(popup_display), icon=folium.Icon(color=setVolcanoMarkerColour(elevation=elevation))))
 
 #add the feature group with the volcano markers to the map
 map.add_child(volcano_points)
