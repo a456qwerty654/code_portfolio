@@ -42,7 +42,8 @@ popup_html = """
 #add all the volcano markers to the feature group
 for lat, lon, name, elevation in zip(volcano_lat, volcano_lon, volcano_name, volcano_elevation):
     popup_display = folium.IFrame(html=popup_html % (name, lat, lon, elevation), width=200, height=100)
-    volcano_points.add_child(folium.Marker(location=[lat, lon], popup=folium.Popup(popup_display), icon=folium.Icon(color=setVolcanoMarkerColour(elevation=elevation))))
+    volcano_points.add_child(folium.CircleMarker(location=[lat, lon], popup=folium.Popup(popup_display), radius=6, 
+    color='black', weight=2, fill_color=setVolcanoMarkerColour(elevation=elevation), fill_opactiy=0.95))
 
 #add the feature group with the volcano markers to the map
 map.add_child(volcano_points)
