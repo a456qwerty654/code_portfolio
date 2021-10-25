@@ -8,10 +8,13 @@ cwd = pathlib.Path(__file__).parent.resolve()
 #read in volcano locations
 volcano_file = pd.read_csv(f'{cwd}\Volcanoes.txt')
 
-#initialise the map and volcano feature group
+#initialise the map and feature groups
 map = folium.Map(location=[33.58,-99.09], zoom_start=6, tiles='Stamen Terrain')
 volcano_points = folium.FeatureGroup(name='Volcanoes')
+population_display = folium.FeatureGroup(name='Population')
 
+
+# ------------ Volcano point layer creation ------------
 #create latitude, longitude lists to loop through
 volcano_lat = list(volcano_file['LAT'])
 volcano_lon = list(volcano_file['LON'])
@@ -45,8 +48,25 @@ for lat, lon, name, elevation in zip(volcano_lat, volcano_lon, volcano_name, vol
     volcano_points.add_child(folium.CircleMarker(location=[lat, lon], popup=folium.Popup(popup_display), radius=6, 
     color='black', weight=2, fill_color=setVolcanoMarkerColour(elevation=elevation), fill_opactiy=0.95))
 
-#add the feature group with the volcano markers to the map
+# ------------ Population layer creation ------------
+#read in population data
+population_data = open(f'{cwd}\world.json', 'r', encoding='utf-8-sig')
+
+#add the population data to the feature group
+population_display.add_child(folium.GeoJson(data=population_data.read(),
+style_function=lambda x: {'fillColor':
+'red' if x['properties']['POP2005'] > 1000000000 else
+'orange' if x['properties']['POP2005'] > 100000000 else
+'green' if x['properties']['POP2005'] > 10000000 else
+'blue'}))
+
+
+
+# ------------ Map building and output ------------
+#add feature groups to map
+map.add_child(population_display)
 map.add_child(volcano_points)
+
 
 #output map html file
 map.save(outfile=f'{cwd}\\volcanomap.html')
