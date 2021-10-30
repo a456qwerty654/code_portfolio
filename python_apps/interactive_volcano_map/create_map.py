@@ -9,9 +9,15 @@ cwd = pathlib.Path(__file__).parent.resolve()
 volcano_file = pd.read_csv(f'{cwd}\Volcanoes.txt')
 
 #initialise the map and feature groups
-map = folium.Map(location=[33.58,-99.09], zoom_start=6, tiles='Stamen Terrain')
+map = folium.Map(location=[25,10], zoom_start=3, tiles=None)
 volcano_points = folium.FeatureGroup(name='Volcanoes')
 population_display = folium.FeatureGroup(name='Population')
+
+#add map base styling layer
+base_map_layer = folium.TileLayer(
+    tiles='Stamen Terrain',
+    control=False
+)
 
 
 # ------------ Volcano point layer creation ------------
@@ -62,6 +68,9 @@ style_function=lambda x: {'fillColor':
 
 
 # ------------ Map building and output ------------
+#add base styling layer to map
+map.add_child(base_map_layer)
+
 #add feature groups to map
 map.add_child(population_display)
 map.add_child(volcano_points)
