@@ -61,12 +61,13 @@ style_function=lambda x: {'fillColor':
 'blue'}))
 
 
-
 # ------------ Map building and output ------------
 #add feature groups to map
 map.add_child(population_display)
 map.add_child(volcano_points)
 
+#add layer control panel
+map.add_child(folium.LayerControl(collapsed=False))
 
 #output map html file
 map.save(outfile=f'{cwd}\\volcanomap.html')
